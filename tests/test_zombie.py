@@ -4,12 +4,12 @@ from base import BaseBrowserTests
 from fake_webapp import EXAMPLE_APP
 
 
-#class ZombieTest(BaseBrowserTests, unittest.TestCase):
-class ZombieTest(unittest.TestCase):
+class ZombieTest(BaseBrowserTests, unittest.TestCase):
+# class ZombieTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.browser = Browser('zombie')
+        cls.browser = Browser('zombiejs')
 
     def setUp(self):
         self.browser.visit(EXAMPLE_APP)

@@ -12,5 +12,5 @@ setup(name='splinter',
       packages=find_packages(),
       include_package_data=True,
       install_requires=['selenium==2.7.0', 'lxml==2.3.1'],
-      tests_require=['coverage', 'flask'],
+      tests_require=['coverage', 'flask', 'zombie'],
       )

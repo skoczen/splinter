@@ -56,7 +56,7 @@ class ElementList(list):
         For more details, check the docs for :meth:`DriverAPI.find_by_css <splinter.driver.DriverAPI.find_by_css>`
         method.
         """
-        return self.driver.find_by_css(element)
+        return self.driver.find_by_css(element, context=self.context)
 
     def is_empty(self):
         """
