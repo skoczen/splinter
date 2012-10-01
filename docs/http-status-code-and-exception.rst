@@ -1,3 +1,7 @@
+.. Copyright 2012 splinter authors. All rights reserved.
+   Use of this source code is governed by a BSD-style
+   license that can be found in the LICENSE file.
+
 .. meta::
     :description: Dealing with HTTP status code and HTTP exceptions with Splinter
     :keywords: splinter, python, tutorial, documentation, exception, http error, status code
@@ -20,9 +24,12 @@ for you or you can compare the status code directly:
     browser.status_code.is_success() # True
     # or
     browser.status_code == 200 # True
+    # or
+    browser.status_code.code # 200
 
 The difference between those methods is that if you get a redirect (or something that is not an HTTP error),
-``status_code.is_success`` will consider your response as successfully.
+``status_code.is_success`` will consider your response as successfully. The numeric status code can be accessed via
+``status_code.code``.
 
 Handling HTTP exceptions
 ------------------------

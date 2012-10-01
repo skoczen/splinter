@@ -1,3 +1,7 @@
+.. Copyright 2012 splinter authors. All rights reserved.
+   Use of this source code is governed by a BSD-style
+   license that can be found in the LICENSE file.
+
 .. meta::
     :description: How to use splinter with zope.testbrowser
     :keywords: splinter, python, tutorial, how to install, installation, zope, testbrowser, zope.testbrowser
@@ -26,7 +30,7 @@ the ``Browser`` instance:
 
 ::
 
-    from splinter.browser import Browser
+    from splinter import Browser
     browser = Browser('zope.testbrowser')
 
 **Note:** if you don't provide any driver to ``Browser`` function, ``firefox`` will be used.

@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+
+# Copyright 2012 splinter authors. All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
 import os
 
 try:
@@ -6,7 +11,7 @@ try:
 except ImportError:
     import unittest
 
-from splinter.browser import Browser
+from splinter import Browser
 from base import BaseBrowserTests
 from fake_webapp import EXAMPLE_APP
 
@@ -39,7 +44,7 @@ class ZopeTestBrowserDriverTest(BaseBrowserTests, unittest.TestCase):
         browser = Browser('zope.testbrowser')
         browser.visit(EXAMPLE_APP)
         browser.forward()
-        self.assertEquals(EXAMPLE_APP, browser.url)
+        self.assertEqual(EXAMPLE_APP, browser.url)
         browser.quit()
 
     def test_cant_switch_to_frame(self):
@@ -49,7 +54,7 @@ class ZopeTestBrowserDriverTest(BaseBrowserTests, unittest.TestCase):
             self.fail()
 
         e = cm.exception
-        self.assertEquals("zope.testbrowser does not support frames", e.args[0])
+        self.assertEqual("zope.testbrowser doesn't support frames.", e.args[0])
 
     def test_simple_type(self):
         "zope.testbrowser won't support type method because it doesn't interact with JavaScript"

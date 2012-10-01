@@ -1,3 +1,7 @@
+.. Copyright 2012 splinter authors. All rights reserved.
+   Use of this source code is governed by a BSD-style
+   license that can be found in the LICENSE file.
+
 .. meta::
     :description: Dealing with elements in the page.
     :keywords: splinter, python, tutorial, documentation, forms, click links, get value
@@ -139,6 +143,19 @@ To check if an element is visible or invisible, use the ``visible`` property. Fo
     browser.find_by_css('h1').first.visible
 
 will be True if the element is visible, or False if it is invisible.
+
+
+Verifying if element has a className
+------------------------------------
+
+To check if an element has a className, use the ``has_class`` method. For instance:
+
+.. highlight:: python
+
+::
+
+    browser.find_by_css('.content').first.has_class('content')
+
 
 Interacting with elements through a ElementList object
 ------------------------------------------------------

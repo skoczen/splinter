@@ -1,3 +1,7 @@
+.. Copyright 2012 splinter authors. All rights reserved.
+   Use of this source code is governed by a BSD-style
+   license that can be found in the LICENSE file.
+
 .. meta::
     :description: How to use splinter with Firefox webdriver
     :keywords: splinter, python, tutorial, how to install, installation, firefox, selenium
@@ -29,7 +33,7 @@ the ``Browser`` instance:
 
 ::
 
-    from splinter.browser import Browser
+    from splinter import Browser
     browser = Browser('firefox')
 
 **Note:** if you don't provide any driver to ``Browser`` function, ``firefox`` will be used.
@@ -44,7 +48,7 @@ using the ``profile`` keyword (passing the name of the profile as a ``str`` inst
 
 ::
 
-    from splinter.browser import Browser
+    from splinter import Browser
     browser = Browser('firefox', profile='my_profile')
 
 If you don't specify a profile, a new temporary profile will be created (and deleted when you ``close`` the browser).
@@ -58,7 +62,7 @@ An extension for firefox is a .xpi archive. To use an extension in Firefox webdr
 
 ::
 
-    from splinter.browser import Browser
+    from splinter import Browser
     browser = Browser('firefox', extensions=['extension1.xpi', 'extension2.xpi'])
 
 If you give an extension, after you close the browser, the extension will be deleted from the profile, even if is not a temporary one.

@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
+
+# Copyright 2012 splinter authors. All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
 from splinter.driver.webdriver.firefox import WebDriver as FirefoxWebDriver
+from splinter.driver.webdriver.remote import WebDriver as RemoteWebDriver
 from splinter.driver.webdriver.chrome import WebDriver as ChromeWebDriver
 from splinter.exceptions import DriverNotFoundError
 from splinter.utils import deprecate_driver_class
@@ -7,6 +13,7 @@ from splinter.utils import deprecate_driver_class
 
 _DRIVERS = {
     'firefox': FirefoxWebDriver,
+    'remote': RemoteWebDriver,
     'chrome': ChromeWebDriver,
     'webdriver.chrome': deprecate_driver_class(ChromeWebDriver, message="'webdriver.chrome' is deprecated, use just 'chrome'"),
     'webdriver.firefox': deprecate_driver_class(FirefoxWebDriver, message="'webdriver.firefox' is deprecated, use just 'firefox'"),

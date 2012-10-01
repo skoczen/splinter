@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+
+# Copyright 2012 splinter authors. All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+from __future__ import with_statement
+import re
+
 from lxml.cssselect import CSSSelector
 from zope.testbrowser.browser import Browser
 from splinter.element_list import ElementList
@@ -7,6 +16,7 @@ from splinter.cookie_manager import CookieManagerAPI
 import mimetypes
 import lxml.html
 import mechanize
+
 
 class CookieManager(CookieManagerAPI):
 
@@ -45,6 +55,12 @@ class ZopeTestBrowser(DriverAPI):
 
         self._cookie_manager = CookieManager(self._browser.cookies)
         self._last_urls = []
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        pass
 
     def visit(self, url):
         self._browser.open(url)
@@ -152,7 +168,7 @@ class ZopeTestBrowser(DriverAPI):
         for name, value in field_values.items():
             element = self.find_by_name(name)
             control = element.first._control
-            if control.type == 'text':
+            if control.type in ['text', 'textarea']:
                 control.value = value
             elif control.type == 'checkbox':
                 if value:
@@ -198,12 +214,15 @@ class ZopeTestBrowser(DriverAPI):
     def _get_mech_browser(self, user_agent):
         mech_browser = mechanize.Browser()
         if user_agent is not None:
-            mech_browser.addheaders = [("User-agent", user_agent),]
+            mech_browser.addheaders = [("User-agent", user_agent), ]
         return mech_browser
 
     @property
     def cookies(self):
         return self._cookie_manager
+
+
+re_extract_inner_html = re.compile(r'^<[^<>]+>(.*)</[^<>]+>$')
 
 
 class ZopeTestBrowserElement(ElementAPI):
@@ -241,11 +260,22 @@ class ZopeTestBrowserElement(ElementAPI):
 
     @property
     def value(self):
-        return self._element.text
+        return self._element.text_content()
 
     @property
     def text(self):
         return self.value
+
+    @property
+    def outer_html(self):
+        return lxml.html.tostring(self._element, encoding=unicode).strip()
+
+    @property
+    def html(self):
+        return re_extract_inner_html.match(self.outer_html).group(1)
+
+    def has_class(self, class_name):
+        return len(self._element.find_class(class_name)) > 0
 
 
 class ZopeTestBrowserLinkElement(ZopeTestBrowserElement):
@@ -261,7 +291,7 @@ class ZopeTestBrowserLinkElement(ZopeTestBrowserElement):
         return self._browser.open(self["href"])
 
 
-class ZopeTestBrowserControlElement(ElementAPI):
+class ZopeTestBrowserControlElement(ZopeTestBrowserElement):
 
     def __init__(self, control, parent):
         self._control = control
@@ -285,7 +315,7 @@ class ZopeTestBrowserControlElement(ElementAPI):
         self._control.value = value
 
 
-class ZopeTestBrowserOptionElement(ElementAPI):
+class ZopeTestBrowserOptionElement(ZopeTestBrowserElement):
 
     def __init__(self, control, parent):
         self._control = control
@@ -305,4 +335,3 @@ class ZopeTestBrowserOptionElement(ElementAPI):
     @property
     def selected(self):
         return self._control.mech_item._selected
-

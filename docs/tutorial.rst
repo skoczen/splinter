@@ -1,3 +1,7 @@
+.. Copyright 2012 splinter authors. All rights reserved.
+   Use of this source code is governed by a BSD-style
+   license that can be found in the LICENSE file.
+
 .. meta::
     :description: Splinter tutorial, learn how to test your web applications
     :keywords: splinter, python, tutorial, documentation, web application, tests, atdd, tdd, acceptance tests
@@ -16,13 +20,13 @@ This tutorial provides a simple example, teaching step by step how to:
 Create a Browser instance
 =========================
 
-First of all, import ``Browser`` class and instantiate it. 
+First of all, import ``Browser`` class and instantiate it.
 
 .. highlight:: python
 
 ::
 
-    from splinter.browser import Browser
+    from splinter import Browser
     browser = Browser()
 
 
@@ -60,9 +64,9 @@ In order to find Google's search button, do:
 
 ::
 
-    button = browser.find_by_css('.lsb').first
+    button = browser.find_by_name('btnG')
 
-Note that this ``.lsb`` was found looking at Google's page source code.
+Note that this ``btnG`` was found looking at Google's page source code.
 
 With the button in hands, we can then press it:
 
@@ -79,7 +83,7 @@ Note: Both steps presented above could be joined in a single line, such as:
 
 ::
 
-    browser.find_by_css('.lsb').first.click()
+    browser.find_by_name('btnG').click()
 
 
 Find out that Splinter official website is in the search results
@@ -119,12 +123,12 @@ Finally, the source code will be:
 
 ::
 
-    from splinter.browser import Browser
+    from splinter import Browser
 
     browser = Browser()
     browser.visit('http://google.com')
     browser.fill('q', 'splinter - python acceptance testing for web applications')
-    browser.find_by_css('.lsb').first.click()
+    browser.find_by_name('btnG').click()
 
     if browser.is_text_present('splinter.cobrateam.info'):
         print "Yes, the official website was found!"

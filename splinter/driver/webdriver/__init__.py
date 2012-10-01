@@ -1,11 +1,16 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+# Copyright 2012 splinter authors. All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+from __future__ import with_statement
 import logging
 import subprocess
 import time
+import re
 from contextlib import contextmanager
 
-from lxml.cssselect import CSSSelector
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.action_chains import ActionChains
 
@@ -49,6 +54,12 @@ class BaseWebDriver(DriverAPI):
     def _unpatch_subprocess(self):
         # cleaning up the house
         subprocess.Popen = self.old_popen
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.quit()
 
     @property
     def title(self):
@@ -149,6 +160,11 @@ class BaseWebDriver(DriverAPI):
                 return True
             except ValueError:
                 pass
+            except NoSuchElementException:
+                # This exception will be thrown if the body tag isn't present
+                # This has occasionally been observed. Assume that the
+                # page isn't fully loaded yet
+                pass
         return False
 
     def is_text_not_present(self, text, wait_time=None):
@@ -160,6 +176,11 @@ class BaseWebDriver(DriverAPI):
                 self.driver.find_element_by_tag_name('body').text.index(text)
             except ValueError:
                 return True
+            except NoSuchElementException:
+                # This exception will be thrown if the body tag isn't present
+                # This has occasionally been observed. Assume that the
+                # page isn't fully loaded yet
+                pass
         return False
 
     @contextmanager
@@ -183,10 +204,10 @@ class BaseWebDriver(DriverAPI):
         return self.find_by_xpath('//a[contains(@href, "%s")]' % partial_href, original_find="link by partial href", original_query=partial_href)
 
     def find_link_by_partial_text(self, partial_text):
-        return ElementList([self.element_class(element, self) for element in self.driver.find_elements_by_partial_link_text(partial_text)], find_by="partial text", query=partial_text)
+        return self.find_by_xpath('//a[contains(text(), "%s")]' % partial_text, original_find="link by partial text", original_query=partial_text)
 
     def find_link_by_text(self, text):
-        return ElementList([self.element_class(element, self) for element in self.driver.find_elements_by_link_text(text)], find_by="link by text", query=text)
+        return self.find_by_xpath('//a[text()="%s"]' % text, original_find="link by text", original_query=text)
 
     def find_by(self, finder, selector, original_find=None, original_query=None):
         elements = None
@@ -209,8 +230,7 @@ class BaseWebDriver(DriverAPI):
         return ElementList([], find_by=find_by, query=query)
 
     def find_by_css(self, css_selector):
-        selector = CSSSelector(css_selector)
-        return self.find_by(self.driver.find_elements_by_xpath, selector.path, original_find='css', original_query=css_selector)
+        return self.find_by(self.driver.find_elements_by_css_selector, css_selector, original_find='css', original_query=css_selector)
 
     def find_by_xpath(self, xpath, original_find=None, original_query=None):
         original_find = original_find or "xpath"
@@ -239,7 +259,7 @@ class BaseWebDriver(DriverAPI):
         for name, value in field_values.items():
             elements = self.find_by_name(name)
             element = elements.first
-            if element['type'] == 'text':
+            if element['type'] == 'text' or element.tag_name == 'textarea':
                 element.value = value
             elif element['type'] == 'checkbox':
                 if value:
@@ -267,16 +287,13 @@ class BaseWebDriver(DriverAPI):
                 field.click()
 
     def check(self, name):
-        field = self.find_by_name(name).first
-        field.check()
+        self.find_by_name(name).first.check()
 
     def uncheck(self, name):
-        field = self.find_by_name(name).first
-        field.uncheck()
+        self.find_by_name(name).first.uncheck()
 
     def select(self, name, value):
-        element = self.find_by_xpath('//select[@name="%s"]/option[@value="%s"]' % (name, value)).first._element
-        element.click()
+        self.find_by_xpath('//select[@name="%s"]/option[@value="%s"]' % (name, value)).first._element.click()
 
     def quit(self):
         self.driver.quit()
@@ -285,6 +302,25 @@ class BaseWebDriver(DriverAPI):
     def cookies(self):
         return self._cookie_manager
 
+    @property
+    def current_window(self):
+        """
+        Returns the handle of the current window.
+        """
+        return self.driver.current_window_handle
+
+    @property
+    def windows(self):
+        """
+        Returns the handles of all windows within the current session.
+        """
+        return self.driver.window_handles
+
+    def switch_to_window(self, window_name):
+        """
+        Switches focus to the specified window.
+        """
+        return self.driver.switch_to_window(window_name)
 
 class TypeIterator(object):
 
@@ -307,14 +343,10 @@ class WebDriverElement(ElementAPI):
         self.action_chains = ActionChains(parent.driver)
 
     def _get_value(self):
-        value = self["value"]
-        if value:
-            return value
-        else:
-            return self._element.text
+        return self['value'] or self._element.text
 
     def _set_value(self, value):
-        if  self._element.get_attribute('type') != 'file':
+        if self._element.get_attribute('type') != 'file':
             self._element.clear()
         self._element.send_keys(value)
 
@@ -323,6 +355,10 @@ class WebDriverElement(ElementAPI):
     @property
     def text(self):
         return self._element.text
+
+    @property
+    def tag_name(self):
+        return self._element.tag_name
 
     def fill(self, value):
         self.value = value
@@ -355,6 +391,14 @@ class WebDriverElement(ElementAPI):
     def visible(self):
         return self._element.is_displayed()
 
+    @property
+    def html(self):
+        return self['innerHTML']
+
+    @property
+    def outer_html(self):
+        return self['outerHTML']
+
     def find_by_css(self, selector, original_find=None, original_query=None):
         find_by = original_find or 'css'
         query = original_query or selector
@@ -381,6 +425,9 @@ class WebDriverElement(ElementAPI):
     def find_by_id(self, id):
         elements = ElementList(self._element.find_elements_by_id(id))
         return ElementList([self.__class__(element, self.parent) for element in elements], find_by='id', query=id)
+
+    def has_class(self, class_name):
+        return bool(re.search(r'(?:^|\s)' + re.escape(class_name) + r'(?:$|\s)', self['class']))
 
     def mouse_over(self):
         """

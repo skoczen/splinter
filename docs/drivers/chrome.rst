@@ -1,3 +1,7 @@
+.. Copyright 2012 splinter authors. All rights reserved.
+   Use of this source code is governed by a BSD-style
+   license that can be found in the LICENSE file.
+
 .. meta::
     :description: How to use splinter with Chrome webdriver
     :keywords: splinter, python, tutorial, how to install, installation, chrome, selenium
@@ -19,45 +23,29 @@ It's important to note that you also need to have Google Chrome installed in you
 Setting up Chrome WebDriver
 ---------------------------
 
-In order to use `Google Chrome <http://google.com/chrome>`_ with Splinter, since we're using Selenium 2.3.0,
-you need to setup Chrome webdriver properly. All you need to do is `download <http://code.google.com/p/chromium/downloads/list>`_
-a prebuilt distribution of ChromeDriver server and put it in your ``PATH``.
-
-Windows
--------
-
-    **Note:** We don't provide official support for Windows, but you can try it by yourself.
-
-All you need to do is go to `download page on Selenium project <http://code.google.com/p/chromium/downloads/list>`_ and choose
-"ChromeDriver server for win32". Your browser will download a zip file, extract it and add the ``.exe`` file to your PATH.
-
-If you don't know how to add an executable to the PATH on Windows, check these link out:
-
-* `Environment variables <http://msdn.microsoft.com/en-us/library/ms682653.aspx>`_
-* `How to manage environment variables in Windows XP <http://support.microsoft.com/kb/310519>`_
-
-Linux and Mac OS X
-------------------
-
-Go to the `download page on Chromium project <http://code.google.com/p/chromium/downloads/list>`_ and choose
-the properly version for you Linux (32 or 64 bits) or Mac OS ("ChromeDriver server for Mac OSX"). Then extract the
-downloaded file in a directory in the ``PATH`` (e.g. ``/usr/bin``). You can also extract it to any directory
-and add that directory to the ``PATH``:
+In order to use `Google Chrome <http://google.com/chrome>`_ with Splinter, since we're using Selenium 2.3.x,
+you need to setup Chrome webdriver properly.
 
 
-Mac OSX
-=======
+Mac OS X
+--------
+
+The recommended way is by using `Homebrew <http://mxcl.github.com/homebrew/>`_:
 
 .. highlight:: bash
 
 ::
 
-    $ cd $HOME/Downloads
-    $ wget http://chromium.googlecode.com/files/chromedriver_mac_14.0.836.0.zip
-    $ unzip chromedriver_mac_14.0.836.0.zip
-    $ mkdir -p $HOME/bin
-    $ mv chromedriver $HOME/bin
-    $ echo "export PATH=$PATH:$HOME/bin" >> $HOME/.bash_profile
+    $ brew install chromedriver
+
+
+Linux
+-----
+
+Go to the `download page on Chromium project <https://code.google.com/p/chromedriver/downloads/list>`_ and choose
+the properly version for you Linux (32 or 64 bits). Then extract the
+downloaded file in a directory in the ``PATH`` (e.g. ``/usr/bin``). You can also extract it to any directory
+and add that directory to the ``PATH``:
 
 
 Linux 32bits
@@ -68,8 +56,8 @@ Linux 32bits
 ::
 
     $ cd $HOME/Downloads
-    $ wget http://chromium.googlecode.com/files/chromedriver_linux32_14.0.836.0.zip
-    $ unzip chromedriver_linux32_14.0.836.0.zip
+    $ wget https://chromedriver.googlecode.com/files/chromedriver_linux32_20.0.1133.0.zip
+    $ unzip chromedriver_linux32_20.0.1133.0.zip
 
 
 Linux 64bits
@@ -80,8 +68,8 @@ Linux 64bits
 ::
 
     $ cd $HOME/Downloads
-    $ wget http://chromium.googlecode.com/files/chromedriver_linux64_14.0.836.0.zip
-    $ unzip chromedriver_linux64_14.0.836.0.zip
+    $ wget https://chromedriver.googlecode.com/files/chromedriver_linux64_20.0.1133.0.zip
+    $ unzip chromedriver_linux64_20.0.1133.0.zip
 
 
 Linux (common steps for 32 and 64bits)
@@ -96,6 +84,20 @@ Linux (common steps for 32 and 64bits)
     $ echo "export PATH=$PATH:$HOME/bin" >> $HOME/.bash_profile
 
 
+Windows
+-------
+
+    **Note:** We don't provide official support for Windows, but you can try it by yourself.
+
+All you need to do is go to `download page on Selenium project <https://code.google.com/p/chromedriver/downloads/list>`_ and choose
+"ChromeDriver server for win". Your browser will download a zip file, extract it and add the ``.exe`` file to your PATH.
+
+If you don't know how to add an executable to the PATH on Windows, check these link out:
+
+* `Environment variables <http://msdn.microsoft.com/en-us/library/ms682653.aspx>`_
+* `How to manage environment variables in Windows XP <http://support.microsoft.com/kb/310519>`_
+
+
 Using Chrome WebDriver
 ----------------------
 
@@ -106,7 +108,7 @@ the ``Browser`` instance:
 
 ::
 
-    from splinter.browser import Browser
+    from splinter import Browser
     browser = Browser('chrome')
 
 **Note:** if you don't provide any driver to ``Browser`` function, ``firefox`` will be used.

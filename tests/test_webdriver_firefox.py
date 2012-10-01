@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+
+# Copyright 2012 splinter authors. All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
 import os
 
 try:
@@ -6,7 +11,7 @@ try:
 except ImportError:
     import unittest
 
-from splinter.browser import Browser
+from splinter import Browser
 from fake_webapp import EXAMPLE_APP
 from base import WebDriverTests
 
@@ -81,6 +86,27 @@ class FirefoxWithExtensionTest(unittest.TestCase):
     def test_create_a_firefox_instance_with_extension(self):
         "should be able to load an extension"
         self.assertIn('firebug@software.joehewitt.com', os.listdir(self.browser.driver.profile.extensionsDir))
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.browser.quit()
+
+
+class FirefoxBrowserProfilePreferencesTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        preferences = {
+            'dom.max_script_run_time': 360,
+            'devtools.inspector.enabled': True,
+        }
+        cls.browser = Browser("firefox", profile_preferences=preferences)
+
+    def test_preference_set(self):
+        preferences = self.browser.driver.profile.default_preferences
+        self.assertIn('dom.max_script_run_time', preferences)
+        value = preferences.get('dom.max_script_run_time')
+        self.assertEqual(int(value), 360)
 
     @classmethod
     def tearDownClass(cls):

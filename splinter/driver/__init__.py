@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-:
+
+# Copyright 2012 splinter authors. All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
 """
 This module contains the basic API for splinter drivers and elemnts.
 """
 
-from splinter.element_list import ElementList
+from splinter.within import Within
 from splinter.meta import InheritedDocs
 from splinter.request_handler.request_handler import RequestHandler
 
@@ -20,21 +25,33 @@ class DriverAPI(RequestHandler):
         """
         Title of current page.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support access to the title." % self.driver_name)
+
+    def __enter__(self):
+        """
+        Context manager to use the browser safely.
+        """
+        raise NotImplementedError("%s doesn't support use by 'with' statement." % self.driver_name)
+
+    def __exit__(self):
+        """
+        Context manager to use the browser safely.
+        """
+        raise NotImplementedError("%s doesn't support use by 'with' statement." % self.driver_name)
 
     @property
     def html(self):
         """
         Source of current page.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support access to the html." % self.driver_name)
 
     @property
     def url(self):
         """
         URL of current page.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support access to the url." % self.driver_name)
 
     def visit(self, url):
         """
@@ -42,7 +59,7 @@ class DriverAPI(RequestHandler):
 
         The ``url`` parameter is a string.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't visit any url." % self.driver_name)
 
     def back(self):
         """
@@ -50,7 +67,7 @@ class DriverAPI(RequestHandler):
 
         If there is no URL to back, this method does nothing.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support moving back in history." % self.driver_name)
 
     def forward(self):
         """
@@ -58,13 +75,13 @@ class DriverAPI(RequestHandler):
 
         If there is no URL to forward, this method does nothing.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support moving forward in history." % self.driver_name)
 
     def reload(self):
         """
         Revisits the current URL
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support reloading the page." % self.driver_name)
 
     def get_alert(self):
         """
@@ -72,7 +89,7 @@ class DriverAPI(RequestHandler):
 
         For more details, check the :doc:`docs about iframes, alerts and prompts </iframes-and-alerts>`
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support alerts." % self.driver_name)
 
     def get_iframe(self, name):
         """
@@ -80,7 +97,7 @@ class DriverAPI(RequestHandler):
 
         For more details, check the :doc:`docs about iframes, alerts and prompts </iframes-and-alerts>`
         """
-        raise NotImplementedError("%s does not support frames" % self.driver_name)
+        raise NotImplementedError("%s doesn't support frames." % self.driver_name)
 
     def execute_script(self, script):
         """
@@ -89,7 +106,7 @@ class DriverAPI(RequestHandler):
         e.g.: ::
             >>> browser.execute_script('document.getElementById("body").innerHTML = "<p>Hello world!</p>"')
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support executiong of arbitrary JavaScript." % self.driver_name)
 
     def evaluate_script(self, script):
         """
@@ -100,21 +117,21 @@ class DriverAPI(RequestHandler):
         e.g.: ::
             >>> assert 4 == browser.evaluate_script('2 + 2')
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support evaluation of arbitrary JavaScript." % self.driver_name)
 
     def find_by_css(self, css_selector):
         """
         Returns an instance of :class:`ElementList <splinter.element_list.ElementList>`, using a CSS selector to query the
         current page content.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support finding elements by css selector." % self.driver_name)
 
     def find_by_xpath(self, xpath):
         """
         Returns an instance of :class:`ElementList <splinter.element_list.ElementList>`, using a xpath selector to query the
         current page content.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support finding elements by xpath selector." % self.driver_name)
 
     def find_by_name(self, name):
         """
@@ -122,7 +139,7 @@ class DriverAPI(RequestHandler):
 
         Returns an instance of :class:`ElementList <splinter.element_list.ElementList>`.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support finding elements by name." % self.driver_name)
 
     def find_by_id(self, id):
         """
@@ -130,7 +147,7 @@ class DriverAPI(RequestHandler):
 
         Even when only one element is find, this method returns an instance of :class:`ElementList <splinter.element_list.ElementList>`
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support finding elements by id." % self.driver_name)
 
     def find_by_value(self, value):
         """
@@ -138,7 +155,7 @@ class DriverAPI(RequestHandler):
 
         Returns an instance of :class:`ElementList <splinter.element_list.ElementList>`
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support finding elements by value." % self.driver_name)
 
     def find_by_tag(self, tag):
         """
@@ -146,7 +163,7 @@ class DriverAPI(RequestHandler):
 
         Returns an instance of :class:`ElementList <splinter.element_list.ElementList>`
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support finding elements by tag." % self.driver_name)
 
     def find_link_by_href(self, href):
         """
@@ -154,7 +171,7 @@ class DriverAPI(RequestHandler):
 
         Returns an instance of :class:`ElementList <splinter.element_list.ElementList>`
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support finding links by href." % self.driver_name)
 
     def find_link_by_partial_href(self, partial_href):
         """
@@ -162,7 +179,7 @@ class DriverAPI(RequestHandler):
 
         Returns an instance of :class:`ElementList <splinter.element_list.ElementList>`
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support finding links by partial href." % self.driver_name)
 
     def find_link_by_text(self, text):
         """
@@ -170,7 +187,7 @@ class DriverAPI(RequestHandler):
 
         Returns an instance of :class:`ElementList <splinter.element_list.ElementList>`
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support finding links by text." % self.driver_name)
 
     def find_link_by_partial_text(self, partial_text):
         """
@@ -178,7 +195,7 @@ class DriverAPI(RequestHandler):
 
         Returns an instance of :class:`ElementList <splinter.element_list.ElementList>`
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support finding links by partial text." % self.driver_name)
 
     def find_option_by_value(self, value):
         """
@@ -186,7 +203,7 @@ class DriverAPI(RequestHandler):
 
         Returns an instance of :class:`ElementList <splinter.element_list.ElementList>`
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support finding options by value." % self.driver_name)
 
     def find_option_by_text(self, text):
         """
@@ -194,7 +211,7 @@ class DriverAPI(RequestHandler):
 
         Returns an instance of :class:`ElementList <splinter.element_list.ElementList>`
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support finding options by text." % self.driver_name)
 
     def is_text_present(self, text, wait_time=None):
         """
@@ -202,7 +219,7 @@ class DriverAPI(RequestHandler):
 
         Returns True if finds a match for the ``text`` and False if not.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support checking if some text is present in the html. " % self.driver_name)
 
     def type(self, name, value, slowly=False):
         """
@@ -210,19 +227,19 @@ class DriverAPI(RequestHandler):
 
         It's useful to test javascript events like keyPress, keyUp, keyDown, etc.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support typing on fields by name." % self.driver_name)
 
     def fill(self, name, value):
         """
         Fill the field identified by ``name`` with the content specified by ``value``.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support filling fields by name." % self.driver_name)
 
     def fill_form(self, field_values):
         """
         Fill the fields identified by ``name`` with the content specified by ``value`` in a dict.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support filling forms with a dict." % self.driver_name)
 
     def choose(self, name, value):
         """
@@ -235,7 +252,7 @@ class DriverAPI(RequestHandler):
 
         Then you're choosing the female gender.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support choosing options." % self.driver_name)
 
     def check(self, name):
         """
@@ -249,7 +266,7 @@ class DriverAPI(RequestHandler):
 
         To unckech a checkbox, take a look in the :meth:`uncheck <DriverAPI.uncheck>` method.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support checking elements." % self.driver_name)
 
     def uncheck(self, name):
         """
@@ -263,7 +280,7 @@ class DriverAPI(RequestHandler):
 
         To check a checkbox, take a look in the :meth:`check <DriverAPI.check>` method.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support unchecking elements." % self.driver_name)
 
     def select(self, name, value):
         """
@@ -274,7 +291,7 @@ class DriverAPI(RequestHandler):
 
             >>> browser.select("state", "NY")
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support selecting options in 'select' element." % self.driver_name)
 
     def click_link_by_href(self, href):
         """
@@ -301,7 +318,7 @@ class DriverAPI(RequestHandler):
         return self.find_link_by_partial_text(partial_text).first.click()
 
     def within(self, context):
-        return ElementList([], context, self)
+        return Within(self.find_by_css(context))
 
     def quit(self):
         """
@@ -309,7 +326,7 @@ class DriverAPI(RequestHandler):
 
         After quit the browser, you can't use it anymore.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support quit" % self.driver_name)
 
     def is_element_present_by_css(self, css_selector, wait_time=None):
         """
@@ -317,7 +334,7 @@ class DriverAPI(RequestHandler):
 
         Returns True if the element is present and False if is not present.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support verifying if element is present by css" % self.driver_name)
 
     def is_element_not_present_by_css(self, css_selector, wait_time=None):
         """
@@ -325,7 +342,7 @@ class DriverAPI(RequestHandler):
 
         Returns True if the element is not present and False if is present.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support verifying if element is not present by css" % self.driver_name)
 
     def is_element_present_by_xpath(self, xpath, wait_time=None):
         """
@@ -333,7 +350,7 @@ class DriverAPI(RequestHandler):
 
         Returns True if the element is present and False if is not present.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support verifying if element is present by xpath" % self.driver_name)
 
     def is_element_not_present_by_xpath(self, xpath, wait_time=None):
         """
@@ -341,7 +358,7 @@ class DriverAPI(RequestHandler):
 
         Returns True if the element is not present and False if is present.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support verifying if element is not present by xpath" % self.driver_name)
 
     def is_element_present_by_tag(self, tag, wait_time=None):
         """
@@ -349,7 +366,7 @@ class DriverAPI(RequestHandler):
 
         Returns True if the element is present and False if is not present.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support verifying if element is present by tag" % self.driver_name)
 
     def is_element_not_present_by_tag(self, tag, wait_time=None):
         """
@@ -357,7 +374,7 @@ class DriverAPI(RequestHandler):
 
         Returns True if the element is not present and False if is present.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support verifying if element is not present by tag" % self.driver_name)
 
     def is_element_present_by_name(self, name, wait_time=None):
         """
@@ -365,7 +382,7 @@ class DriverAPI(RequestHandler):
 
         Returns True if the element is present and False if is not present.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support verifying if element is present by name" % self.driver_name)
 
     def is_element_not_present_by_name(self, name, wait_time=None):
         """
@@ -373,7 +390,7 @@ class DriverAPI(RequestHandler):
 
         Returns True if the element is not present and False if is present.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support verifying if element is not present by name" % self.driver_name)
 
     def is_element_present_by_value(self, value, wait_time=None):
         """
@@ -381,7 +398,7 @@ class DriverAPI(RequestHandler):
 
         Returns True if the element is present and False if is not present.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support verifying if element is present by value" % self.driver_name)
 
     def is_element_not_present_by_value(self, value, wait_time=None):
         """
@@ -389,7 +406,7 @@ class DriverAPI(RequestHandler):
 
         Returns True if the element is not present and False if is present.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support verifying if element is not present by value" % self.driver_name)
 
     def is_element_present_by_id(self, id, wait_time=None):
         """
@@ -397,7 +414,7 @@ class DriverAPI(RequestHandler):
 
         Returns True if the element is present and False if is not present.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support verifying if element is present by id" % self.driver_name)
 
     def is_element_not_present_by_id(self, id, wait_time=None):
         """
@@ -405,7 +422,7 @@ class DriverAPI(RequestHandler):
 
         Returns True if the element is not present and False if is present.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support verifying if element is not present by id" % self.driver_name)
 
     @property
     def cookies(self):
@@ -414,7 +431,7 @@ class DriverAPI(RequestHandler):
 
         For more details, check the :doc:`cookies manipulation section </cookies>`.
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s doesn't support cookies manipulation" % self.driver_name)
 
 
 class ElementAPI(object):
@@ -423,7 +440,7 @@ class ElementAPI(object):
 
     Any element in the page can be represented as an instance of ``ElementAPI``.
 
-    Once you have an instance, you can easily access its attributes like a ``dict``:
+    Once you have an instance, you can easily access attributes like a ``dict``:
 
         >>> element = browser.find_by_id("link-logo").first
         >>> assert element['href'] == 'http://splinter.cobrateam.info'
@@ -490,6 +507,12 @@ class ElementAPI(object):
     def visible(self):
         """
         Boolean property that says if the element is visible or hidden in the current page.
+        """
+        raise NotImplementedError
+
+    def has_class(self, class_name):
+        """
+        Indicates whether the element has the given class.
         """
         raise NotImplementedError
 

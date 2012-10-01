@@ -1,3 +1,7 @@
+.. Copyright 2012 splinter authors. All rights reserved.
+   Use of this source code is governed by a BSD-style
+   license that can be found in the LICENSE file.
+
 .. meta::
     :description: Find how to write new drivers for splinter.
     :keywords: splinter, python, contribution, open source, testing, web application, atdd, drivers
@@ -16,7 +20,7 @@ file containing some code like this:
 
 ::
 
-    from splinter.browser import Browser
+    from splinter import Browser
     from tests.base import BaseBrowserTests
 
     class ColumbiaTest(BaseBrowserTests):

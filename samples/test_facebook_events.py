@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+
+# Copyright 2012 splinter authors. All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
 """
 This snippet show how to "test" a Facebook feature: the creation of an event.
 
@@ -10,7 +15,7 @@ from __future__ import with_statement
 import os
 import unittest
 import time
-from splinter.browser import Browser
+from splinter import Browser
 
 class FacebookEventsTestCase(unittest.TestCase):
 
