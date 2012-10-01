@@ -86,6 +86,7 @@ class ZombieElement(ElementAPI):
         raise NotImplementedError
 
     def __getitem__(self, attribute):
+        print "Getting"
         raise NotImplementedError
 
 
@@ -108,8 +109,24 @@ class ZombieTestBrowser(DriverAPI):
         self._last_urls = []
 
     def _element_list_from_list(self, element_list):
-        print element_list
-        return ZombieElementList([ele for ele in element_list])
+        print "element_list", element_list
+        zel = ZombieElementList([])
+        elist = []
+        for e in element_list:
+            try:
+                print e
+                print ZombieElement(e, self)
+                print ZombieElement(e, self).__dict__
+                elist.append(ZombieElement(e, self))
+            except:
+                from traceback import print_exc
+                print_exc()
+
+        print "zel", zel
+        print "elist", elist
+        return ZombieElementList(elist)
+        return zel
+        return ZombieElementList([ZombieElement(ele, self) for ele in element_list])
 
     @property
     def title(self):
